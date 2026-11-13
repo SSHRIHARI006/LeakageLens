@@ -1,0 +1,19 @@
+{
+  "git_sha": "e686f1a88329addf544b8cd31caff12a12f9d7b9",
+  "experiment_script_sha256": "67ae0b050f8658809a35ad9d36195da3be1efe5ee1dd37a39400104c4f3eb5ac",
+  "dependency_versions": {
+    "python": "3.14.4",
+    "numpy": "2.3.5",
+    "pandas": "3.1.1",
+    "scikit-learn": "1.9.1",
+    "fastapi": "0.115.6",
+    "httpx": "0.27.2",
+    "openpyxl": "3.1.5",
+    "xlrd": "2.0.2",
+    "pytest": "8.4.2",
+    "streamlit": "unavailable",
+    "ruff": "unavailable",
+    "pyarrow": "unavailable"
+  },
+  "finished_utc": "2026-11-13T12:27:48Z"
+}

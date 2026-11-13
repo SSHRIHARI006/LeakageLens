@@ -17,9 +17,11 @@ probability that leakage exists.
   warning; a target-derived feature with an innocuous name can be missed. Only
   numeric predictors are screened for association; categorical coverage is
   recorded but not scored.
-- **Exact duplicates hash all non-target columns.** Two rows that differ only in
-  the target are reported as duplicate features and separately as a label
-  conflict; they are not treated as identical labelled examples.
+- **Exact and near-duplicate comparisons exclude non-predictive fields by
+  default.** `encounter_id`, `patient_nbr`, `readmitted`, and
+  `readmitted_within_30_days` are excluded so evidence reflects predictive
+  feature overlap rather than identifiers or labels. Callers can provide
+  additional exclusions for a prediction-time feature policy.
 
 ## Split and evaluation scope
 

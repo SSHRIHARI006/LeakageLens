@@ -11,6 +11,7 @@ from .schemas import Finding
 
 SUSPICIOUS_TERMS = ("outcome", "diagnosis", "result", "final", "target", "label", "post", "future", "discharge", "status")
 NULL_TOKEN = "<MISSING>"
+DEFAULT_NON_PREDICTIVE_COLUMNS = frozenset({"encounter_id", "patient_nbr", "readmitted", "readmitted_within_30_days"})
 
 
 def _severity(score: float) -> str:
@@ -44,9 +45,18 @@ def feature_row_hashes(features: pd.DataFrame) -> pd.Series:
     return pd.util.hash_pandas_object(keys, index=False)
 
 
-def exact_duplicates(frame: pd.DataFrame, target: str, train: Iterable[int] | None = None, test: Iterable[int] | None = None) -> list[Finding]:
+def _comparison_features(frame: pd.DataFrame, target: str, exclude_columns: Iterable[str] | None = None) -> pd.DataFrame:
+    excluded = set(DEFAULT_NON_PREDICTIVE_COLUMNS)
+    excluded.add(target)
+    if exclude_columns:
+        excluded.update(exclude_columns)
+    return frame.drop(columns=[column for column in excluded if column in frame], errors="ignore")
+
+
+def exact_duplicates(frame: pd.DataFrame, target: str, train: Iterable[int] | None = None, test: Iterable[int] | None = None,
+                     exclude_columns: Iterable[str] | None = None) -> list[Finding]:
     """Detect exact duplicate feature rows and train/test feature overlap."""
-    features = frame.drop(columns=[target], errors="ignore")
+    features = _comparison_features(frame, target, exclude_columns)
     row_hash = feature_row_hashes(features)
     duplicate_mask = row_hash.duplicated(keep=False)
     groups = int(row_hash[duplicate_mask].nunique())
@@ -93,13 +103,14 @@ def exact_duplicates(frame: pd.DataFrame, target: str, train: Iterable[int] | No
     return findings
 
 
-def near_duplicates(frame: pd.DataFrame, target: str, decimals: int = 2, max_rows: int = 100_000) -> list[Finding]:
+def near_duplicates(frame: pd.DataFrame, target: str, decimals: int = 2, max_rows: int = 100_000,
+                    exclude_columns: Iterable[str] | None = None) -> list[Finding]:
     """Blocking approximation: rows equal after numeric rounding and categorical normalization.
 
     This is deliberately *not* general nearest-neighbour similarity search. It uses
     rounded/normalized row equality and reports only candidates.
     """
-    features = frame.drop(columns=[target], errors="ignore")
+    features = _comparison_features(frame, target, exclude_columns)
     sampled = len(features) > max_rows
     work = features.iloc[:max_rows].copy() if sampled else features.copy()
     for column in work.select_dtypes(include=np.number):

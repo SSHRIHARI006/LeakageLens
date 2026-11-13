@@ -1,0 +1,258 @@
+{
+  "scenarios": {
+    "admission": {
+      "feature_count": 12,
+      "features": [
+        "race",
+        "gender",
+        "age",
+        "weight",
+        "admission_type_id",
+        "admission_source_id",
+        "payer_code",
+        "medical_specialty",
+        "number_outpatient",
+        "number_emergency",
+        "number_inpatient",
+        "diag_1"
+      ],
+      "exact_feature_duplicates": {
+        "rows": 31719,
+        "groups": 9037,
+        "conflicting_groups": 2238
+      },
+      "near_duplicates": [
+        {
+          "detector_name": "near_duplicates",
+          "category": "near_duplicate",
+          "severity": "moderate",
+          "confidence": "medium",
+          "score": 31.03,
+          "title": "Approximate near-duplicate candidates",
+          "description": "31030 rows (31.03%) are equal after numeric values are rounded to 2 decimals and categorical text is normalized. Analysis was sampled to the first 100000 rows.",
+          "evidence": {
+            "candidate_rows": 31030,
+            "percent_analyzed_rows": 31.03,
+            "numeric_round_decimals": 2,
+            "sampled": true,
+            "analyzed_rows": 100000
+          },
+          "affected_columns": [],
+          "affected_rows": 31030,
+          "recommendation": "Review candidates and use appropriate entity/duplicate grouping before interpreting the evaluation.",
+          "verification_status": "heuristic"
+        }
+      ],
+      "random_split_overlap": [
+        {
+          "seed": 42,
+          "test_rows_with_train_match": 7064,
+          "patient_overlap": 8158,
+          "detector_split_contamination": true
+        },
+        {
+          "seed": 43,
+          "test_rows_with_train_match": 7018,
+          "patient_overlap": 8031,
+          "detector_split_contamination": true
+        },
+        {
+          "seed": 44,
+          "test_rows_with_train_match": 7176,
+          "patient_overlap": 8130,
+          "detector_split_contamination": true
+        },
+        {
+          "seed": 45,
+          "test_rows_with_train_match": 7072,
+          "patient_overlap": 8006,
+          "detector_split_contamination": true
+        },
+        {
+          "seed": 46,
+          "test_rows_with_train_match": 7224,
+          "patient_overlap": 8117,
+          "detector_split_contamination": true
+        },
+        {
+          "seed": 47,
+          "test_rows_with_train_match": 7310,
+          "patient_overlap": 8047,
+          "detector_split_contamination": true
+        },
+        {
+          "seed": 48,
+          "test_rows_with_train_match": 7288,
+          "patient_overlap": 8000,
+          "detector_split_contamination": true
+        },
+        {
+          "seed": 49,
+          "test_rows_with_train_match": 7161,
+          "patient_overlap": 8051,
+          "detector_split_contamination": true
+        },
+        {
+          "seed": 50,
+          "test_rows_with_train_match": 7162,
+          "patient_overlap": 8101,
+          "detector_split_contamination": true
+        },
+        {
+          "seed": 51,
+          "test_rows_with_train_match": 7178,
+          "patient_overlap": 8051,
+          "detector_split_contamination": true
+        }
+      ]
+    },
+    "discharge": {
+      "feature_count": 47,
+      "features": [
+        "race",
+        "gender",
+        "age",
+        "weight",
+        "admission_type_id",
+        "discharge_disposition_id",
+        "admission_source_id",
+        "time_in_hospital",
+        "payer_code",
+        "medical_specialty",
+        "num_lab_procedures",
+        "num_procedures",
+        "num_medications",
+        "number_outpatient",
+        "number_emergency",
+        "number_inpatient",
+        "diag_1",
+        "diag_2",
+        "diag_3",
+        "number_diagnoses",
+        "max_glu_serum",
+        "A1Cresult",
+        "metformin",
+        "repaglinide",
+        "nateglinide",
+        "chlorpropamide",
+        "glimepiride",
+        "acetohexamide",
+        "glipizide",
+        "glyburide",
+        "tolbutamide",
+        "pioglitazone",
+        "rosiglitazone",
+        "acarbose",
+        "miglitol",
+        "troglitazone",
+        "tolazamide",
+        "examide",
+        "citoglipton",
+        "insulin",
+        "glyburide-metformin",
+        "glipizide-metformin",
+        "glimepiride-pioglitazone",
+        "metformin-rosiglitazone",
+        "metformin-pioglitazone",
+        "change",
+        "diabetesMed"
+      ],
+      "exact_feature_duplicates": {
+        "rows": 0,
+        "groups": 0,
+        "conflicting_groups": 0
+      },
+      "near_duplicates": [],
+      "random_split_overlap": [
+        {
+          "seed": 42,
+          "test_rows_with_train_match": 0,
+          "patient_overlap": 8158,
+          "detector_split_contamination": false
+        },
+        {
+          "seed": 43,
+          "test_rows_with_train_match": 0,
+          "patient_overlap": 8031,
+          "detector_split_contamination": false
+        },
+        {
+          "seed": 44,
+          "test_rows_with_train_match": 0,
+          "patient_overlap": 8130,
+          "detector_split_contamination": false
+        },
+        {
+          "seed": 45,
+          "test_rows_with_train_match": 0,
+          "patient_overlap": 8006,
+          "detector_split_contamination": false
+        },
+        {
+          "seed": 46,
+          "test_rows_with_train_match": 0,
+          "patient_overlap": 8117,
+          "detector_split_contamination": false
+        },
+        {
+          "seed": 47,
+          "test_rows_with_train_match": 0,
+          "patient_overlap": 8047,
+          "detector_split_contamination": false
+        },
+        {
+          "seed": 48,
+          "test_rows_with_train_match": 0,
+          "patient_overlap": 8000,
+          "detector_split_contamination": false
+        },
+        {
+          "seed": 49,
+          "test_rows_with_train_match": 0,
+          "patient_overlap": 8051,
+          "detector_split_contamination": false
+        },
+        {
+          "seed": 50,
+          "test_rows_with_train_match": 0,
+          "patient_overlap": 8101,
+          "detector_split_contamination": false
+        },
+        {
+          "seed": 51,
+          "test_rows_with_train_match": 0,
+          "patient_overlap": 8051,
+          "detector_split_contamination": false
+        }
+      ]
+    }
+  },
+  "suspicious_features": [
+    {
+      "detector_name": "feature_suspicion",
+      "category": "target_proxy",
+      "severity": "moderate",
+      "confidence": "low",
+      "score": 30.0,
+      "title": "Potential post-outcome feature names",
+      "description": "Names alone do not establish leakage, but these columns merit domain review.",
+      "evidence": {
+        "matched_terms": [
+          "result",
+          "discharge"
+        ],
+        "matched_columns": [
+          "discharge_disposition_id",
+          "A1Cresult"
+        ]
+      },
+      "affected_columns": [
+        "discharge_disposition_id",
+        "A1Cresult"
+      ],
+      "affected_rows": null,
+      "recommendation": "Confirm each feature is available at the intended prediction time.",
+      "verification_status": "heuristic"
+    }
+  ]
+}

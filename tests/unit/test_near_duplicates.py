@@ -37,6 +37,15 @@ def test_target_column_is_excluded():
     assert findings and findings[0].affected_rows == 2
 
 
+def test_near_duplicates_ignore_identifiers_and_raw_target():
+    frame = pd.DataFrame({
+        "encounter_id": [101, 202], "patient_nbr": [11, 22], "x": [1.001, 1.004],
+        "readmitted": ["NO", "<30"], "readmitted_within_30_days": [0, 1],
+    })
+    findings = near_duplicates(frame, "readmitted_within_30_days")
+    assert findings and findings[0].affected_rows == 2
+
+
 def test_max_rows_cap_reports_sampling_and_analyzed_count():
     frame = pd.DataFrame({"x": np.arange(20, dtype=float), "target": [0, 1] * 10})
     # The first ten rows are unique, so a cap of ten yields no candidate but sampling metadata is still honest.

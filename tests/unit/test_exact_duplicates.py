@@ -49,6 +49,24 @@ def test_identical_features_different_indices_are_duplicates():
     assert findings and findings[0].evidence["duplicate_rows"] == 2
 
 
+def test_predictive_duplicates_ignore_identifiers_and_raw_target():
+    frame = pd.DataFrame({
+        "encounter_id": [101, 202], "patient_nbr": [11, 22], "x": [5, 5],
+        "readmitted": ["NO", "<30"], "readmitted_within_30_days": [0, 1],
+    })
+    findings = exact_duplicates(frame, "readmitted_within_30_days")
+    assert findings and findings[0].category == "duplicate"
+
+
+def test_predictive_duplicate_overlap_ignores_identifiers():
+    frame = pd.DataFrame({
+        "encounter_id": [101, 202], "patient_nbr": [11, 22], "x": [5, 5],
+        "readmitted": ["NO", "<30"], "readmitted_within_30_days": [0, 1],
+    })
+    findings = exact_duplicates(frame, "readmitted_within_30_days", train=[0], test=[1])
+    assert any(f.category == "split_contamination" for f in findings)
+
+
 def test_split_overlap_counts_test_rows():
     frame = pd.DataFrame({"x": [1, 2, 3, 4, 1, 5], "target": [0, 1, 0, 1, 0, 1]})
     findings = exact_duplicates(frame, "target", train=[0, 1, 2, 3], test=[4, 5])

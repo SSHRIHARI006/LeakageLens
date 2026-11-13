@@ -1,11 +1,7 @@
 # Diabetes experiment methodology
 
-The experiment uses a fold-local `ColumnTransformer` and sklearn `Pipeline`. Numeric features use median imputation; categorical features use most-frequent imputation. Logistic regression uses one-hot encoding and scaling; tree models use ordinal encoding without scaling. Class weighting is used where supported; no resampling or test-set tuning is performed.
+The experiment uses fold-local sklearn `ColumnTransformer` and `Pipeline` objects. Numeric features use median imputation; categorical features use most-frequent imputation. Logistic regression uses one-hot encoding and scaling; tree models use ordinal encoding. Class weighting is used where supported. No resampling or test-set tuning is performed.
 
-Models: DummyClassifier, LogisticRegression, DecisionTreeClassifier, RandomForestClassifier and HistGradientBoostingClassifier. Metrics: accuracy, balanced accuracy, precision, recall, F1, ROC-AUC, average precision, specificity and 2×2 confusion matrices.
+Models are DummyClassifier, LogisticRegression, DecisionTreeClassifier, RandomForestClassifier and HistGradientBoostingClassifier. Metrics are accuracy, balanced accuracy, precision, recall, F1, ROC-AUC, average precision, specificity and confusion matrices. Random splits are stratified row splits; grouped splits use `GroupShuffleSplit` on `patient_nbr`. Ten seeds (42–51) were executed.
 
-The random protocol uses stratified row splitting. The patient-grouped protocol uses `GroupShuffleSplit` on `patient_nbr`; class-distribution differences are reported rather than hidden. The run uses seeds 42–51.
-
-The admission/discharge feature policies are explicit and are not directly comparable as one clinical task. No chronological experiment is reported because the available file lacks a defensible timestamp.
-
-Raw seed-level results are in `validation/real_world/diabetes_130/results/run_20261113T111348Z/model_results.csv`; aggregate mean, standard deviation, minimum and maximum are in `model_summary.csv`.
+Admission policy excludes `diag_2`, `diag_3`, and `number_diagnoses` because their admission-time availability is unresolved in the distributed data. Raw seed-level results are in `validation/real_world/diabetes_130/results/run_20261113T122123Z/model_results.csv`; aggregate results are in `validation/real_world/diabetes_130/results/run_20261113T122123Z/model_summary.csv`.

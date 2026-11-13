@@ -1,0 +1,39 @@
+[
+  {
+    "condition": "clean_control",
+    "expected": false,
+    "detected": false,
+    "findings": []
+  },
+  {
+    "condition": "exact_duplicate_cross_split",
+    "expected": true,
+    "detected": true,
+    "findings": [
+      "duplicate",
+      "split_contamination"
+    ]
+  },
+  {
+    "condition": "target_derived_feature",
+    "expected": true,
+    "detected": true,
+    "findings": [
+      "target_proxy"
+    ]
+  },
+  {
+    "condition": "random_patient_group_overlap",
+    "expected": true,
+    "detected": true,
+    "findings": [
+      "group"
+    ]
+  },
+  {
+    "condition": "grouped_clean_control",
+    "expected": false,
+    "detected": false,
+    "findings": []
+  }
+]

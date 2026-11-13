@@ -99,4 +99,4 @@ Not fully validated or unsupported for this case study:
 - Full UI/API acceptance remains blocked by the environment limitations listed above.
 - Identifier-containing predictive models and preprocessing-leakage injections were not promoted as clinically valid results; they remain controlled diagnostic scope.
 
-Real-world artifacts: `validation/real_world/diabetes_130/results/run_20261113T111348Z/`. Reports: `docs/real_world_case_study_diabetes.md`, `docs/diabetes_experiment_methodology.md`, `docs/diabetes_leakage_findings.md`, `docs/diabetes_model_evaluation.md`, `docs/diabetes_experiment_limitations.md`, and `docs/diabetes_experiment_reproduction.md`.
+Real-world artifacts: `validation/real_world/diabetes_130/results/run_20261113T122123Z/`. Reports: `docs/real_world_case_study_diabetes.md`, `docs/diabetes_experiment_methodology.md`, `docs/diabetes_leakage_findings.md`, `docs/diabetes_model_evaluation.md`, `docs/diabetes_experiment_limitations.md`, and `docs/diabetes_experiment_reproduction.md`.

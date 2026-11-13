@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from leakagelens.detectors import exact_duplicates, group_overlap
+from leakagelens.detectors import exact_duplicates, group_overlap, near_duplicates
 from leakagelens.evaluation import make_split
 from validation.real_world.diabetes_130.run_experiment import TARGET, feature_columns, load
 
@@ -39,3 +39,19 @@ def test_exact_cross_split_control_is_detected():
     test = np.array([4])
     findings = exact_duplicates(injected, TARGET, train, test)
     assert any(f.category == "split_contamination" for f in findings)
+
+
+def test_diabetes_feature_policy_excludes_unresolved_secondary_diagnoses():
+    frame = fixture().assign(**{TARGET: [0, 1, 0, 0], "diag_1": ["250", "250", "401", "401"], "diag_2": ["1", "1", "2", "2"], "diag_3": ["3", "3", "4", "4"], "number_diagnoses": [3, 3, 4, 4]})
+    assert not {"diag_2", "diag_3", "number_diagnoses"} & set(feature_columns(frame, "admission"))
+
+
+def test_diabetes_detector_finds_same_predictive_features_with_different_ids():
+    frame = fixture().assign(**{TARGET: [0, 1, 0, 0]})
+    frame.loc[1, "encounter_id"] = 999
+    frame.loc[1, "patient_nbr"] = 888
+    frame.loc[1, "readmitted"] = "<30"
+    frame.loc[1, "race"] = frame.loc[0, "race"]
+    frame.loc[1, "admission_type_id"] = frame.loc[0, "admission_type_id"]
+    assert exact_duplicates(frame, TARGET)
+    assert near_duplicates(frame, TARGET)

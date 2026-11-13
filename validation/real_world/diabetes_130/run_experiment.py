@@ -38,6 +38,7 @@ ADMISSION_EXCLUDE = {
     "glyburide", "tolbutamide", "pioglitazone", "rosiglitazone", "acarbose", "miglitol", "troglitazone",
     "tolazamide", "examide", "citoglipton", "insulin", "glyburide-metformin", "glipizide-metformin",
     "glimepiride-pioglitazone", "metformin-rosiglitazone", "metformin-pioglitazone",
+    "diag_2", "diag_3", "number_diagnoses",
 }
 
 
@@ -47,6 +48,17 @@ def sha256(path: Path) -> str:
         for chunk in iter(lambda: f.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def dependency_versions() -> dict[str, str]:
+    versions = {"python": platform.python_version(), "numpy": np.__version__, "pandas": pd.__version__, "scikit-learn": sklearn.__version__}
+    for module in ("fastapi", "httpx", "openpyxl", "xlrd", "pytest", "streamlit", "ruff", "pyarrow"):
+        try:
+            imported = __import__(module)
+            versions[module] = getattr(imported, "__version__", "installed")
+        except Exception:
+            versions[module] = "unavailable"
+    return versions
 
 
 def git_sha() -> str | None:
@@ -151,15 +163,21 @@ def evaluate(frame: pd.DataFrame, scenario: str, protocol: str, seed: int, model
 
 
 def duplicate_summary(frame: pd.DataFrame, seeds: list[int]) -> dict:
-    h = feature_row_hashes(frame.drop(columns=[TARGET_RAW, TARGET]))
-    dup = h.duplicated(keep=False)
-    exact = {"rows": int(dup.sum()), "groups": int(h[dup].nunique()), "conflicting_groups": int((frame.loc[dup].groupby(h[dup].to_numpy())[TARGET].nunique() > 1).sum())}
-    random = []
-    for seed in seeds:
-        train, test = make_split(frame, TARGET, "classification", seed, strategy="random")
-        overlap = set(h.iloc[train]) & set(h.iloc[test])
-        random.append({"seed": seed, "test_rows_with_train_match": int(h.iloc[test].isin(overlap).sum()), "patient_overlap": int(len(set(frame.iloc[train].patient_nbr) & set(frame.iloc[test].patient_nbr)))})
-    return {"exact_feature_duplicates": exact, "random_split_overlap": random, "near_duplicates": near_duplicates(frame, TARGET, decimals=2, max_rows=100000), "suspicious_features": [x.to_dict() for x in suspicious_features(frame, TARGET, "classification")]}
+    scenarios = {}
+    for scenario in ["admission", "discharge"]:
+        features = feature_columns(frame, scenario)
+        analysis = frame[features + [TARGET]].copy()
+        h = feature_row_hashes(analysis.drop(columns=[TARGET]))
+        dup = h.duplicated(keep=False)
+        exact = {"rows": int(dup.sum()), "groups": int(h[dup].nunique()), "conflicting_groups": int((analysis.loc[dup].groupby(h[dup].to_numpy())[TARGET].nunique() > 1).sum())}
+        random = []
+        for seed in seeds:
+            train, test = make_split(frame, TARGET, "classification", seed, strategy="random")
+            overlap = set(h.iloc[train]) & set(h.iloc[test])
+            exact_findings = exact_duplicates(analysis, TARGET, train, test)
+            random.append({"seed": seed, "test_rows_with_train_match": int(h.iloc[test].isin(overlap).sum()), "patient_overlap": int(len(set(frame.iloc[train].patient_nbr) & set(frame.iloc[test].patient_nbr))), "detector_split_contamination": any(x.category == "split_contamination" for x in exact_findings)})
+        scenarios[scenario] = {"feature_count": len(features), "features": features, "exact_feature_duplicates": exact, "near_duplicates": [x.to_dict() for x in near_duplicates(analysis, TARGET, decimals=2, max_rows=100000)], "random_split_overlap": random}
+    return {"scenarios": scenarios, "suspicious_features": [x.to_dict() for x in suspicious_features(frame, TARGET, "classification")]}
 
 
 def controlled_validation(frame: pd.DataFrame, seed: int = 42) -> list[dict]:
@@ -211,7 +229,7 @@ def main() -> None:
     frame = load(args.data)
     seeds = SEEDS[:args.seeds]
     (out / "dataset_metadata.json").write_text(json.dumps(metadata(frame, args.data), indent=2))
-    config = {"seeds": seeds, "scenarios": {"admission": sorted(ADMISSION_EXCLUDE), "discharge": "all non-target, non-identifier columns"}, "models": ["dummy", "logistic", "tree", "forest", "hist_gradient_boosting"], "protocols": ["random", "patient_grouped"], "identifiers_primary": "excluded", "near_duplicate_decimals": 2, "git_sha": git_sha(), "python": platform.python_version(), "numpy": np.__version__, "pandas": pd.__version__, "scikit_learn": sklearn.__version__}
+    config = {"seeds": seeds, "scenarios": {"admission": sorted(ADMISSION_EXCLUDE), "discharge": "all non-target, non-identifier columns"}, "models": ["dummy", "logistic", "tree", "forest", "hist_gradient_boosting"], "protocols": ["random", "patient_grouped"], "identifiers_primary": "excluded", "near_duplicate_decimals": 2, "git_sha": git_sha(), "experiment_script_sha256": sha256(Path(__file__)), "dependency_versions": dependency_versions()}
     (out / "config.json").write_text(json.dumps(config, indent=2))
     (out / "duplicate_and_detector_summary.json").write_text(json.dumps(duplicate_summary(frame, seeds), indent=2, default=str))
     (out / "controlled_validation.json").write_text(json.dumps(controlled_validation(frame), indent=2))
@@ -240,7 +258,7 @@ def main() -> None:
                 row[col + "_max"] = float(group[col].max())
         agg.append(row)
     pd.DataFrame(agg).to_csv(out / "model_summary.csv", index=False)
-    (out / "run_metadata.json").write_text(json.dumps({"git_sha": git_sha(), "python": platform.python_version(), "packages": {"numpy": np.__version__, "pandas": pd.__version__, "scikit-learn": sklearn.__version__}, "finished_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}, indent=2))
+    (out / "run_metadata.json").write_text(json.dumps({"git_sha": git_sha(), "experiment_script_sha256": sha256(Path(__file__)), "dependency_versions": dependency_versions(), "finished_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}, indent=2))
     print(f"RESULT_DIR={out}", flush=True)
 
 
