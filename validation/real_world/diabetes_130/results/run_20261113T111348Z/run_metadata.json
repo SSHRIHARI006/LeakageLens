@@ -1,0 +1,10 @@
+{
+  "git_sha": "d9db7c761139afaa6340c0019c16974ec8ca1742",
+  "python": "3.14.4",
+  "packages": {
+    "numpy": "2.3.5",
+    "pandas": "3.1.1",
+    "scikit-learn": "1.9.1"
+  },
+  "finished_utc": "2026-11-13T11:20:26Z"
+}

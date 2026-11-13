@@ -1,0 +1,69 @@
+{
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+  ],
+  "scenarios": {
+    "admission": [
+      "A1Cresult",
+      "acarbose",
+      "acetohexamide",
+      "change",
+      "chlorpropamide",
+      "citoglipton",
+      "diabetesMed",
+      "discharge_disposition_id",
+      "examide",
+      "glimepiride",
+      "glimepiride-pioglitazone",
+      "glipizide",
+      "glipizide-metformin",
+      "glyburide",
+      "glyburide-metformin",
+      "insulin",
+      "max_glu_serum",
+      "metformin",
+      "metformin-pioglitazone",
+      "metformin-rosiglitazone",
+      "miglitol",
+      "nateglinide",
+      "num_lab_procedures",
+      "num_medications",
+      "num_procedures",
+      "pioglitazone",
+      "repaglinide",
+      "rosiglitazone",
+      "time_in_hospital",
+      "tolazamide",
+      "tolbutamide",
+      "troglitazone"
+    ],
+    "discharge": "all non-target, non-identifier columns"
+  },
+  "models": [
+    "dummy",
+    "logistic",
+    "tree",
+    "forest",
+    "hist_gradient_boosting"
+  ],
+  "protocols": [
+    "random",
+    "patient_grouped"
+  ],
+  "identifiers_primary": "excluded",
+  "near_duplicate_decimals": 2,
+  "git_sha": "d9db7c761139afaa6340c0019c16974ec8ca1742",
+  "python": "3.14.4",
+  "numpy": "2.3.5",
+  "pandas": "3.1.1",
+  "scikit_learn": "1.9.1"
+}

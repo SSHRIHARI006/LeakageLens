@@ -6,4 +6,5 @@ tmp/
 .venv/
 *.egg-info/
 validation/results/
+diabetes+130-us+hospitals+for+years+1999-2008/
 .specs

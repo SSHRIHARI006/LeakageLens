@@ -24,6 +24,33 @@ Generated from `validation/results/run_20261113T102231Z`. Every number below was
 
 `undefined` means the denominator was zero, not a perfect score. Precision/recall over heuristic feature warnings are warning precision/recall, not leakage proof.
 
+## Spec 2 real-world validation: Diabetes 130-US Hospitals
+
+This section is separate from the synthetic detector benchmark above. It was generated from the raw dataset at `diabetes+130-us+hospitals+for+years+1999-2008/diabetic_data.csv`; the raw folder is git-ignored. Dataset SHA-256: `0689e7ec031237dc63031b938805c48377748761a3b26acab621567afa24df97`. The source file contains 101,766 rows and 50 source columns; the experiment adds one derived target column.
+
+Executed command:
+
+```text
+.venv_sys/bin/python -m validation.real_world.diabetes_130.run_experiment --seeds 10
+.venv_sys/bin/python -m validation.real_world.diabetes_130.generate_reports
+```
+
+The run used seeds 42–51, five requested model families, admission-time and discharge-time feature policies, stratified random splits, and patient-grouped splits. The raw output is in `validation/real_world/diabetes_130/results/run_20261113T111348Z/`.
+
+Primary admission-time patient-grouped performance (mean ± SD over 10 seeds):
+
+| Model | ROC-AUC | Average precision | F1 | Balanced accuracy |
+|---|---:|---:|---:|---:|
+| Dummy | 0.500 ± 0.000 | 0.112 ± 0.003 | 0.000 ± 0.000 | 0.500 ± 0.000 |
+| Logistic regression | 0.631 ± 0.006 | 0.193 ± 0.006 | 0.250 ± 0.006 | 0.595 ± 0.005 |
+| Decision tree | 0.595 ± 0.004 | 0.162 ± 0.008 | 0.231 ± 0.006 | 0.573 ± 0.004 |
+| Random forest | 0.618 ± 0.006 | 0.175 ± 0.008 | 0.215 ± 0.009 | 0.558 ± 0.005 |
+| HistGradientBoosting | 0.645 ± 0.004 | 0.203 ± 0.009 | 0.013 ± 0.003 | 0.503 ± 0.001 |
+
+Random row splits had approximately 8,069 patients in both train and test on average; grouped splits had zero patient overlap in every seed. This is a protocol difference, not a causal leakage estimate. Exact full-row duplicates were absent. Temporal ordering was not reported because the dataset has no defensible admission timestamp. Controlled clean/injected detector outcomes matched their expected labels in the executed run.
+
+See [the case study](real_world_case_study_diabetes.md), [methodology](diabetes_experiment_methodology.md), [findings](diabetes_leakage_findings.md), [model evaluation](diabetes_model_evaluation.md), [limitations](diabetes_experiment_limitations.md), and [reproduction instructions](diabetes_experiment_reproduction.md).
+
 ## Multiple-seed stability
 
 | Detector | Seeds | Overall accuracy | Mean ± std | Median [IQR] | 95% CI (normal approx.) |

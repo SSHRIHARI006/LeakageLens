@@ -1,0 +1,88 @@
+{
+  "exact_feature_duplicates": {
+    "rows": 0,
+    "groups": 0,
+    "conflicting_groups": 0
+  },
+  "random_split_overlap": [
+    {
+      "seed": 42,
+      "test_rows_with_train_match": 0,
+      "patient_overlap": 8158
+    },
+    {
+      "seed": 43,
+      "test_rows_with_train_match": 0,
+      "patient_overlap": 8031
+    },
+    {
+      "seed": 44,
+      "test_rows_with_train_match": 0,
+      "patient_overlap": 8130
+    },
+    {
+      "seed": 45,
+      "test_rows_with_train_match": 0,
+      "patient_overlap": 8006
+    },
+    {
+      "seed": 46,
+      "test_rows_with_train_match": 0,
+      "patient_overlap": 8117
+    },
+    {
+      "seed": 47,
+      "test_rows_with_train_match": 0,
+      "patient_overlap": 8047
+    },
+    {
+      "seed": 48,
+      "test_rows_with_train_match": 0,
+      "patient_overlap": 8000
+    },
+    {
+      "seed": 49,
+      "test_rows_with_train_match": 0,
+      "patient_overlap": 8051
+    },
+    {
+      "seed": 50,
+      "test_rows_with_train_match": 0,
+      "patient_overlap": 8101
+    },
+    {
+      "seed": 51,
+      "test_rows_with_train_match": 0,
+      "patient_overlap": 8051
+    }
+  ],
+  "near_duplicates": [],
+  "suspicious_features": [
+    {
+      "detector_name": "feature_suspicion",
+      "category": "target_proxy",
+      "severity": "moderate",
+      "confidence": "low",
+      "score": 30.0,
+      "title": "Potential post-outcome feature names",
+      "description": "Names alone do not establish leakage, but these columns merit domain review.",
+      "evidence": {
+        "matched_terms": [
+          "result",
+          "discharge"
+        ],
+        "matched_columns": [
+          "discharge_disposition_id",
+          "A1Cresult"
+        ]
+      },
+      "affected_columns": [
+        "discharge_disposition_id",
+        "A1Cresult"
+      ],
+      "affected_rows": null,
+      "recommendation": "Confirm each feature is available at the intended prediction time.",
+      "verification_status": "heuristic"
+    }
+  ]
+}

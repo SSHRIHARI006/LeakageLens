@@ -80,3 +80,23 @@ hidden.
 3. Install Ruff and PyArrow; run lint and Parquet tests.
 4. Execute the full suite in that clean environment and record one final
    aggregate pass/fail/skip count.
+
+## Spec 2 real-world acceptance status
+
+Implemented and executed:
+
+- Dataset verification, SHA-256 capture, target construction and raw-data preservation.
+- Ten-seed random and patient-grouped evaluation for admission-time and discharge-time policies.
+- Dummy, logistic, decision tree, random forest and HistGradientBoosting models with fold-local preprocessing.
+- Independent patient-overlap, duplicate and detector checks.
+- Controlled clean/injected detector validation, with raw expected-versus-observed outcomes.
+- Aggregate reports and five publication-style figures.
+- Three small-fixture regression tests for target/identifier policy, grouped split invariants and exact cross-split detection.
+
+Not fully validated or unsupported for this case study:
+
+- Temporal validation: unsupported because no defensible admission timestamp exists in the supplied file.
+- Full UI/API acceptance remains blocked by the environment limitations listed above.
+- Identifier-containing predictive models and preprocessing-leakage injections were not promoted as clinically valid results; they remain controlled diagnostic scope.
+
+Real-world artifacts: `validation/real_world/diabetes_130/results/run_20261113T111348Z/`. Reports: `docs/real_world_case_study_diabetes.md`, `docs/diabetes_experiment_methodology.md`, `docs/diabetes_leakage_findings.md`, `docs/diabetes_model_evaluation.md`, `docs/diabetes_experiment_limitations.md`, and `docs/diabetes_experiment_reproduction.md`.
