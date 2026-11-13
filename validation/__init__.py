@@ -1,0 +1,1 @@
+"""LeakageLens synthetic validation benchmark."""

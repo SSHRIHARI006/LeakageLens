@@ -1,4 +1,9 @@
 __pycache__/
 .pytest_cache/
+.ruff_cache/
 tmp/
 *.pyc
+.venv/
+*.egg-info/
+validation/results/
+.specs
